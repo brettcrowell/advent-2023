@@ -18,7 +18,7 @@ defmodule Puzzle01 do
     end
   end
 
-  def sum_first_last(input) do
+  def first_last(input) do
     matches =
       Regex.scan(
         ~r/(\d|(?=((one)))|(?=(two))|(?=(three))|(?=(four))|(?=(five))|(?=(six))|(?=(seven))|(?=(eight))|(?=(nine)))/,
@@ -32,6 +32,6 @@ defmodule Puzzle01 do
   end
 
   def part1(input) do
-    Enum.reduce(String.split(input, "\n"), 0, fn line, acc -> acc + sum_first_last(line) end)
+    Enum.reduce(String.split(input, "\n"), 0, fn line, acc -> acc + first_last(line) end)
   end
 end

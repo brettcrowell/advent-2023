@@ -21,12 +21,12 @@ defmodule Puzzle01 do
   def first_last(input) do
     matches =
       Regex.scan(
-        ~r/(\d|(?=((one)))|(?=(two))|(?=(three))|(?=(four))|(?=(five))|(?=(six))|(?=(seven))|(?=(eight))|(?=(nine)))/,
+        ~r/(?=(\d|one|two|three|four|five|six|seven|eight|nine))/,
         input
       )
 
-    first = List.last(List.first(matches))
-    last = List.last(List.last(matches))
+    [_, first] = List.first(matches)
+    [_, last] = List.last(matches)
 
     String.to_integer(to_digit(first) <> to_digit(last))
   end

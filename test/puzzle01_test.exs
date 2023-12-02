@@ -18,6 +18,10 @@ defmodule Puzzle01Test do
       assert 14 == Puzzle01.first_last("zoneight234")
       assert 76 == Puzzle01.first_last("7pqrstsixteen")
     end
+
+    test "should handle the trick case" do
+      assert 88 == Puzzle01.first_last("eightoneight")
+    end
   end
 
   describe "#solve" do

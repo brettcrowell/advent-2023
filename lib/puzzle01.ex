@@ -3,7 +3,7 @@ defmodule Puzzle01 do
   Documentation for `Advent2023`.
   """
 
-  def to_integer(number) do
+  def to_digit(number) do
     case number do
       "one" -> "1"
       "two" -> "2"
@@ -28,7 +28,7 @@ defmodule Puzzle01 do
     first = List.last(List.first(matches))
     last = List.last(List.last(matches))
 
-    String.to_integer(to_integer(first) <> to_integer(last))
+    String.to_integer(to_digit(first) <> to_digit(last))
   end
 
   def solve(input) do

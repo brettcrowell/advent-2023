@@ -31,7 +31,7 @@ defmodule Puzzle01 do
     String.to_integer(to_integer(first) <> to_integer(last))
   end
 
-  def part1(input) do
+  def solve(input) do
     Enum.reduce(String.split(input, "\n"), 0, fn line, acc -> acc + first_last(line) end)
   end
 end

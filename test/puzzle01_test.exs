@@ -20,14 +20,14 @@ defmodule Puzzle01Test do
     end
   end
 
-  describe "#part1" do
+  describe "#solve" do
     test "should return the total sum of all line sums" do
       input = "1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet"
 
-      assert 142 == Puzzle01.part1(input)
+      assert 142 == Puzzle01.solve(input)
     end
 
     test "should handle written numbers" do
@@ -39,7 +39,7 @@ xtwone3four
 zoneight234
 7pqrstsixteen"
 
-      assert 281 == Puzzle01.part1(input)
+      assert 281 == Puzzle01.solve(input)
     end
   end
 end

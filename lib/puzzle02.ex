@@ -25,23 +25,19 @@ defmodule Puzzle02 do
     parsed_game
   end
 
-  def is_possible(%{sets: sets}, max_red, max_green, max_blue) do
-    Enum.any?(sets, fn %{"red" => red, "green" => green, "blue" => blue} ->
-      red > max_red || green > max_green || blue > max_blue
+  def is_possible(%{sets: sets}, max_red \\ 12, max_green \\ 13, max_blue \\ 14) do
+    Enum.all?(sets, fn %{"red" => red, "green" => green, "blue" => blue} ->
+      red <= max_red && green <= max_green && blue <= max_blue
     end)
   end
 
-  def solve_part_1(input, max_red \\ 12, max_green \\ 13, max_blue \\ 14) do
+  def solve_part_1(input) do
     String.split(input, "\n")
     |> Enum.filter(fn game -> game != "" end)
     |> Enum.map(&parse_game/1)
-    |> Enum.reduce(0, fn %{id: id} = game, acc ->
-      if is_possible(game, max_red, max_green, max_blue) do
-        acc
-      else
-        acc + id
-      end
-    end)
+    |> Enum.filter(&is_possible/1)
+    |> Enum.map(fn %{id: id} -> id end)
+    |> Enum.sum()
   end
 
   def minimize_cubes(%{sets: sets}) do

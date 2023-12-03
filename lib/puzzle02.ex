@@ -31,7 +31,7 @@ defmodule Puzzle02 do
     end)
   end
 
-  def solve(input, max_red \\ 12, max_green \\ 13, max_blue \\ 14) do
+  def solve_part_1(input, max_red \\ 12, max_green \\ 13, max_blue \\ 14) do
     String.split(input, "\n")
     |> Enum.filter(fn game -> game != "" end)
     |> Enum.map(&parse_game/1)
@@ -42,5 +42,36 @@ defmodule Puzzle02 do
         acc + id
       end
     end)
+  end
+
+  def minimize_cubes(%{sets: sets}) do
+    base = %{:min_red => 0, :min_green => 0, :min_blue => 0}
+
+    Enum.reduce(sets, base, fn %{
+                                 "red" => red,
+                                 "green" => green,
+                                 "blue" => blue
+                               },
+                               acc ->
+      %{
+        acc
+        | :min_red => Enum.max([acc[:min_red], red]),
+          :min_green => Enum.max([acc[:min_green], green]),
+          :min_blue => Enum.max([acc[:min_blue], blue])
+      }
+    end)
+  end
+
+  def compute_power(%{min_red: red, min_green: green, min_blue: blue}) do
+    red * green * blue
+  end
+
+  def solve_part_2(input) do
+    String.split(input, "\n")
+    |> Enum.filter(fn game -> game != "" end)
+    |> Enum.map(&parse_game/1)
+    |> Enum.map(&minimize_cubes/1)
+    |> Enum.map(&compute_power/1)
+    |> Enum.sum()
   end
 end

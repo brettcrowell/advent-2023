@@ -25,14 +25,18 @@ defmodule Puzzle02 do
     parsed_game
   end
 
+  def is_possible(%{sets: sets}, max_red, max_green, max_blue) do
+    Enum.any?(sets, fn %{"red" => red, "green" => green, "blue" => blue} ->
+      red > max_red || green > max_green || blue > max_blue
+    end)
+  end
+
   def solve(input, max_red \\ 12, max_green \\ 13, max_blue \\ 14) do
     String.split(input, "\n")
     |> Enum.filter(fn game -> game != "" end)
     |> Enum.map(&parse_game/1)
-    |> Enum.reduce(0, fn %{id: id, sets: sets}, acc ->
-      if Enum.any?(sets, fn %{"red" => red, "green" => green, "blue" => blue} ->
-           red > max_red || green > max_green || blue > max_blue
-         end) do
+    |> Enum.reduce(0, fn %{id: id} = game, acc ->
+      if is_possible(game, max_red, max_green, max_blue) do
         acc
       else
         acc + id

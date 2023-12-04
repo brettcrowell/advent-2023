@@ -81,4 +81,40 @@ defmodule Puzzle03Test do
       assert 4361 == Puzzle03.solve_part_1(input)
     end
   end
+
+  describe "get_adjacent_parts" do
+    test "returns the number of parts adjacent to a symbol" do
+      assert 2 ==
+               length(
+                 Puzzle03.get_adjacent_parts(
+                   %{x: 3, y: 1, length: 1},
+                   [
+                     %{token: "467", x: 0, y: 0, length: 3},
+                     %{token: "114", x: 5, y: 0, length: 3},
+                     %{token: "35", x: 2, y: 1, length: 2},
+                     %{token: "633", x: 6, y: 1, length: 3}
+                   ]
+                 )
+               )
+    end
+  end
+
+  describe "solve_part_2" do
+    test "should parse the tokens" do
+      input = """
+      467..114..
+      ...*......
+      ..35..633.
+      ......#...
+      617*......
+      .....+.58.
+      ..592.....
+      ......755.
+      ...$.*....
+      .664.598..
+      """
+
+      assert 467_835 == Puzzle03.solve_part_2(input)
+    end
+  end
 end

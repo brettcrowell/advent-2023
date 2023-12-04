@@ -14,6 +14,10 @@ defmodule Puzzle03 do
     end)
   end
 
+  def parse_tokens(input) do
+    String.split(input, "\n") |> Enum.with_index() |> Enum.map(&get_tokens/1) |> List.flatten()
+  end
+
   def get_all_points(%{x: x, y: y, length: length}) do
     for c <- 0..(length - 1), do: {x + c, y}
   end
@@ -29,14 +33,38 @@ defmodule Puzzle03 do
   end
 
   def solve_part_1(input) do
-    tokens =
-      String.split(input, "\n") |> Enum.with_index() |> Enum.map(&get_tokens/1) |> List.flatten()
+    tokens = parse_tokens(input)
 
     symbols = Enum.filter(tokens, fn %{is_symbol: is_symbol} -> is_symbol end)
     parts = Enum.filter(tokens, fn %{is_symbol: is_symbol} -> !is_symbol end)
 
     Enum.filter(parts, &has_adjacent_symbol(&1, symbols))
     |> Enum.map(fn %{token: token} -> String.to_integer(token) end)
+    |> Enum.sum()
+  end
+
+  def get_adjacent_parts(symbol, parts) do
+    Enum.filter(parts, fn part ->
+      Enum.any?(get_all_points(part), fn point ->
+        distance(point, {symbol.x, symbol.y}) < 2
+      end)
+    end)
+  end
+
+  def compute_ratio([%{token: gear_1}, %{token: gear_2}]) do
+    String.to_integer(gear_1) * String.to_integer(gear_2)
+  end
+
+  def solve_part_2(input) do
+    tokens = parse_tokens(input)
+
+    gears = Enum.filter(tokens, fn %{token: token} -> token == "*" end)
+    parts = Enum.filter(tokens, fn %{is_symbol: is_symbol} -> !is_symbol end)
+
+    gears
+    |> Enum.map(&get_adjacent_parts(&1, parts))
+    |> Enum.filter(fn parts -> length(parts) == 2 end)
+    |> Enum.map(&compute_ratio/1)
     |> Enum.sum()
   end
 end

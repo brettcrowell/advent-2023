@@ -13,6 +13,13 @@ defmodule Puzzle04 do
     %{:card => String.to_integer(card_number), :winners => winners, :draws => draws}
   end
 
+  def parse_input(input) do
+    input
+    |> String.split("\n")
+    |> Enum.filter(fn line -> line != "" end)
+    |> Enum.map(&parse_card/1)
+  end
+
   def compute_score(numbers) do
     Enum.reduce(numbers, 0, fn _, acc ->
       case acc do
@@ -31,12 +38,35 @@ defmodule Puzzle04 do
   end
 
   def solve_part_1(input) do
-    input
-    |> String.split("\n")
-    |> Enum.filter(fn line -> line != "" end)
-    |> Enum.map(&parse_card/1)
+    parse_input(input)
     |> Enum.map(&get_winners/1)
     |> Enum.map(&compute_score/1)
     |> Enum.sum()
+  end
+
+  def get_matching_cards(card, cards) do
+    num_winners = length(get_winners(card))
+
+    case num_winners do
+      0 ->
+        [card]
+
+      _ ->
+        bonus =
+          Enum.slice(cards, card.card, num_winners)
+          |> Enum.map(&get_matching_cards(&1, cards))
+          |> List.flatten()
+
+        [card] ++ bonus
+    end
+  end
+
+  def solve_part_2(input) do
+    cards = parse_input(input)
+
+    cards
+    |> Enum.map(&get_matching_cards(&1, cards))
+    |> List.flatten()
+    |> length
   end
 end
